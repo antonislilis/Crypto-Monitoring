@@ -1,0 +1,468 @@
+
+<html>
+	<head>
+		<title>
+			Coin Monitoring
+		</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js" integrity="sha384-CS0nxkpPy+xUkNGhObAISrkg/xjb3USVCwy+0/NMzd5VxgY4CMCyTkItmy5n0voC" crossorigin="anonymous"></script>
+		<style>
+		@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+			html,body{
+				margin:0 auto;
+				padding:0;
+				font-family: 'Source Sans Pro', sans-serif;
+				position:relative;
+				text-align:center;
+			}
+			h1{
+				margin:0;
+			}
+			.card {
+				padding:10px;
+				width:300px;
+				border:1px solid #eee;
+				margin:10px;
+				-moz-box-shadow:    1px 1px 2px 2px #eee;
+				-webkit-box-shadow: 1px 1px 2px 2px #eee;
+				box-shadow:         1px 1px 2px 2px #eee;
+				display:inline-block
+			}
+			.card .title{
+				font-size:1.5em;
+				text-align:left;
+			}
+			.card .title img{
+				float:left;
+				margin:0px 5px;
+				width:40px;
+			}
+			.card .ticker{
+				text-align:center;
+				font-size:2em;
+				margin:10px;
+				font-weight:bold;
+			}
+			.card .left{
+				float:left;
+				width:50%;
+				font-size:0.7em;
+				text-align:left;
+			}
+			.card .right{
+				float:right;
+				text-align:right;
+				width:50%;
+				font-size:0.7em;
+			}
+			.card .asset{
+				text-align:center;
+				clear:both;
+				font-size:0.8em;
+				margin:10px 0 0 0;
+				font-weight:bold;
+				border-top:1px solid #eee;
+				border-bottom:1px solid #eee;
+			}
+			.card input{
+				width:50px;
+				padding:1px;
+				text-align:center;
+			}
+			.clear{
+				clear:both;
+			}
+			</style>
+	</head>
+	<body>		
+		<h1 style="margin:30px;">Coin Monitoring</h1>
+		
+		<div class="card" id="absolute">
+			<h1 class="title">
+				<img src="https://explorer.absolutecoin.net/images/logo.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }} </div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }} </div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		<div class="card" id="dextro">
+			<h1 class="title">
+				<img src="https://masternodes.online/coin_image/DXO.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }}</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }}</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		<div class="card" id="z01">
+			<h1 class="title">
+				<img src="https://masternodes.online/coin_image/ZOC.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }}</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }}</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		<div class="card" id="ipsum">
+			<h1 class="title">
+				<img src="https://pbs.twimg.com/profile_images/986212308065116161/azeMEpD9_400x400.jpg">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }}</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }}</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		
+		<div class="card" id="len">
+			<h1 class="title">
+				<img src="https://masternodes.online/coin_image/LEN.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }} BTC</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }} BTC</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		
+		<div class="card" id="cub">
+			<h1 class="title">
+				<img src="https://masternodes.online/coin_image/CUB.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }} BTC</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }} BTC</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		
+		<div class="card" id="ketan">
+			<h1 class="title">
+				<img src="https://masternodes.online/coin_image/KETAN.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }} BTC</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }} BTC</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		
+		<div class="card" id="olympic">
+			<h1 class="title">
+				<img src="https://olympcoin.io/wp-content/uploads/2018/05/logo_512_white_w_slogan-350x386.png">
+				{{ name }} ({{ symbol }})
+			</h1>
+			<div class="ticker">
+				{{ info.last }}
+			</div>
+			<div class="left"><small>Buy</small> {{ info.buy | satoshi }} BTC</div>
+			<div class="right"><small>Sell</small> {{ info.sell | satoshi }} BTC</div>
+			<div class="left"><small>Vol {{ symbol }}</small> {{ info.vol | currency }} BTC</div>
+			<div class="right"><small>Vol BTC</small> {{ info.volbtc | satoshi }} BTC</div>
+			<div class="clear"></div>
+			<div class="asset">Your asset : <input type="text" value="1000" v-model="asset"> {{ symbol }}</div>
+			<div class="left"><small>BTC </small> <strong>{{ asset*info.last | currency }} BTC</strong></div>
+			<div class="right"><small>USD </small> <strong>{{ asset*info.last*price.USD.rate_float | currency }} USD</strong></div>
+		</div>
+		<script>
+		var info = {
+				last: 0,
+				buy: 0,
+				sell: 0,
+				volume: 0
+			}
+			var price = {
+				USD:0,
+				GBP:0,
+				EUR:0
+			}
+			var updateInterval = 10000 //10 seconds
+			Vue.mixin({
+				data(){
+					return {
+						price: price
+					}
+				},
+				methods:{
+					loadPrice: function(){
+						console.log('Load Price');
+						axios
+							.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+							.then(response=>(this.price = response.data.bpi))
+					}
+				},
+				filters: {
+					currency (value) {
+						return parseFloat(value).toFixed(2)
+					},
+					satoshi (value) {
+						return parseFloat(value).toFixed(8)
+					}
+				},
+				mounted(){
+					this.loadPrice()
+					setInterval(function(){
+						this.loadPrice()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#absolute',
+				data(){
+					return{
+						info: info,
+						asset: 2500,
+						symbol: "ABS",
+						name: "Absolute"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Absolute');
+						axios
+							.get('https://graviex.net/api/v2/tickers/absbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#dextro',
+				data(){
+					return{
+						info: info,
+						asset: 1000,
+						symbol: "DXO",
+						name: "Dextro"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Dextro');
+						axios
+							.get('https://graviex.net/api/v2/tickers/dxobtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#z01',
+				data(){
+					return{
+						info: info,
+						asset: 1000,
+						symbol: "ZOC",
+						name: "01coin"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Dextro');
+						axios
+							.get('https://graviex.net/api/v2/tickers/zocbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#ipsum',
+				data(){
+					return{
+						info: info,
+						asset: 5000,
+						symbol: "IPS",
+						name: "IPSUM"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Dextro');
+						axios
+							.get('https://graviex.net/api/v2/tickers/ipsbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#len',
+				data(){
+					return{
+						info: info,
+						asset: 1000,
+						symbol: "LEN",
+						name: "Lumen"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Lumen');
+						axios
+							.get('https://graviex.net/api/v2/tickers/lenbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#cub',
+				data(){
+					return{
+						info: info,
+						asset: 10000,
+						symbol: "CUB",
+						name: "CUBEX"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Cubex');
+						axios
+							.get('https://graviex.net/api/v2/tickers/cubbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#ketan',
+				data(){
+					return{
+						info: info,
+						asset: 5000,
+						symbol: "KETAN",
+						name: "Ketan"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Ketan');
+						axios
+							.get('https://graviex.net/api/v2/tickers/ketanbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			new Vue({
+				el: '#olympic',
+				data(){
+					return{
+						info: info,
+						asset: 70000,
+						symbol: "OLMP",
+						name: "Olympic Coin"
+					}
+				},
+				methods: {
+					loadData: function(){
+						console.log('Load data Olympic');
+						axios
+							.get('https://graviex.net/api/v2/tickers/olmpbtc.json')
+							.then(response=>(this.info = response.data.ticker))
+					}
+				},
+				mounted(){
+					this.loadData()
+					setInterval(function(){
+						this.loadData()
+					}.bind(this),updateInterval)
+				}
+			})
+			</script>
+	</body>
+</html>
